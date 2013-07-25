@@ -1,0 +1,105 @@
+<style>
+    .error{color: darkred;}    
+    input.error, textarea.error{border-color: darkred;}
+    
+    input.hiddenTextfield{display: none;}
+</style>
+
+<script>
+    $(document).ready(function() {
+        var digit1 = Math.ceil(Math.random() * 15);
+        var digit2 = Math.ceil(Math.random() * 20);
+        var taskError = 0;
+
+        $("#container_comment_element_task > label").html(digit1 + " + " + digit2);
+
+        $("#container_comment_element_submit #save").click(function() {
+            var expectedResult = digit1 + digit2;
+            var result = parseInt($("#container_comment_element_task input#inputTask").val(), 10);
+            
+            if (result !== expectedResult) {
+                if(taskError < 2){
+                    alert("Rechenaufgabe nicht korrekt !");
+                    taskError++;
+                }else{
+                    self.location.href = "<?php echo $this->baseUrl; ?>";
+                }
+            } else {
+                $('#commentForm').submit();
+            }
+        });
+    });
+</script>
+
+
+<form id="commentForm" class="form-horizontal" action="<?php echo $this->actionUrl; ?>" method="POST">
+
+    <div id="container_comment_element_comment" class="control-group <?php if (isset($this->errors["comment"])) echo "error"; ?>">
+        <label class="control-label" for="inputComment"><?php if($this->lang == "de") { echo "Kommentar"; } else { echo "Comment"; }; ?></label>
+        <div class="controls">
+            <textarea id="inputComment" name="comment" required="required"><?php if (isset($this->post["comment"])) echo $this->post["comment"]; ?></textarea>
+            <?php if($this->lang == "de") : ?>
+                <?php if (isset($this->errors["comment"][1])) : ?>
+                    <div><span class="help-inline">Pflichtfeld</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["comment"][2])) : ?>
+                    <div><span class="help-inline">max. 1000 Zeichen</span></div>
+                <?php endif; ?>
+            <?php else : ?>
+                    <?php if (isset($this->errors["comment"][1])) : ?>
+                    <div><span class="help-inline">required</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["comment"][2])) : ?>
+                    <div><span class="help-inline">max. 1000 characters</span></div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div id="container_comment_element_email" class="control-group <?php if (isset($this->errors["email"])) echo "error"; ?>">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+            <input type="text" id="inputEmail" name="email" required="required" value="<?php if (isset($this->post["email"])) echo $this->post["email"]; ?>">
+            
+            <?php if($this->lang == "de"): ?>
+                <?php if (isset($this->errors["email"][1])) : ?>
+                    <div><span class="help-inline">Pflichtfeld</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["email"][5])) : ?>
+                    <div><span class="help-inline">Keine korrekte Email-Adresse</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["email"][2])) : ?>
+                    <div><span class="help-inline">max. 255 Zeichen</span></div>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if (isset($this->errors["email"][1])) : ?>
+                    <div><span class="help-inline">required</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["email"][5])) : ?>
+                    <div><span class="help-inline">email address is not valid</span></div>
+                <?php endif; ?>
+                <?php if (isset($this->errors["email"][2])) : ?>
+                    <div><span class="help-inline">max. 255 characters</span></div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div id="container_comment_element_task" class="control-group">
+        <label class="control-label" for="inputTask"></label>
+        <div class="controls">
+            <input type="text" id="inputTask" value="" style="width: 30px;">
+        </div>
+    </div>
+    
+    <input class="hiddenTextfield" type="text" name="firstname">
+    <input class="hiddenTextfield" type="text" name="lastname">
+    <input type="hidden" name="id" value="<?php echo $this->uniqId; ?>">
+
+    <div id="container_comment_element_submit" class="control-group">
+        <div class="controls">
+            <input id="save" class="btn" type="button" value="<?php if($this->lang == "de") { echo "Kommentar abschicken"; } else { echo "send comment"; }; ?>">
+        </div>
+    </div>
+
+</form>

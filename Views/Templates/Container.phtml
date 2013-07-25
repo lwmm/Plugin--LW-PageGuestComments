@@ -1,0 +1,25 @@
+<script type="text/javascript" src="<?php echo $this->jQueryMin; ?>"></script>
+
+<style>
+    .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+    }
+
+    .hidden{display: none;}
+</style>
+
+<div id="container_lw_page_guest_comments">
+
+    <div id="container_comment_list">
+        <?php echo $this->commentList; ?>
+    </div>
+    <br>
+    <div id="container_comment_form" <?php if ($this->preview): ?>class="hidden"<?php endif; ?>>
+        <?php echo $this->commentForm; ?>
+    </div>
+</div>

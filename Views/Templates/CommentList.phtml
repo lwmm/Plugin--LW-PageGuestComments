@@ -1,0 +1,125 @@
+<style>
+    #comment_header{
+        border-bottom: 1px solid #ccc;
+    }
+
+    div.commentbox{
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+        min-height: 50px;
+    }
+
+    .odd{background-color: #F4F4F4;}
+    .even{background-color: #fff;}
+
+    div.commentbox div.email_date_container{
+        position: relative;
+    }
+
+    div.commentbox div.email{
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-weight: bold;
+    }
+    
+    div.commentbox div.date{
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-weight: bold;
+    }
+
+    div.commentbox div.comment, div#comment_preview div.comment{
+        margin-top: 30px;
+        padding: 2px 80px;
+    }
+    
+    div.commentbox a.deleteComment{
+        float: right;
+        background-color: darkred;
+        padding: 1px 5px;
+        font-size: 12px;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    #comment_preview{background-color: #D6FFC9}
+
+    a#anchor{
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    #comment_preview_controls a{
+        text-decoration: none;
+        padding: 10px 5px 5px 10px;
+        float: right;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $("#comment_preview #comment_preview_controls #edit").click(function() {
+            $("#comment_preview").slideUp();
+            $("#container_comment_form").slideDown();
+        });
+
+        $("#comment_preview #comment_preview_controls #save").click(function() {
+            $('#commentForm').attr("action", "<?php echo $this->saveUrl; ?>");
+            $('#commentForm').submit();
+        });
+    });
+</script>
+
+<div id="comment_header">
+    <?php if($this->lang == "de"): ?>
+        <h4><?php echo count($this->comments); ?> Kommentar<?php if (count($this->comments) != 1) echo "e"; ?></h4>
+    <?php else: ?>
+        <h4><?php echo count($this->comments); ?> Comment<?php if (count($this->comments) != 1) echo "s"; ?></h4>
+    <?php endif; ?>
+</div>
+<?php $i = 0; ?> 
+<?php foreach ($this->comments as $comment): ?>
+    <div class="commentbox <?php if($i % 2 == 0) { echo "odd"; } else { echo "even"; };?>">
+        <?php if($this->admin): ?>
+            <div class="clearfix">
+                <a class="deleteComment" href="<?php echo $this->deleteUrl . "&cid=" . $comment["id"]; ?>" onclick="if(confirm('<?php if($this->lang == "de") { echo "Diesen Kommentar wirklich l&ouml;schen ?"; } else { echo "Do realy want to delete this comment ?"; }; ?>')){return true;} return false;"><?php if($this->lang == "de") { echo "l&ouml;schen"; } else { echo "delete"; }; ?></a>
+            </div>
+        <?php endif; ?>
+        <div class="email_date_container">
+            <div class="email"><?php echo $comment["opt1text"]; ?></div>
+            <div class="date">
+                <?php
+                $year = substr($comment['opt1number'], 0, 4);
+                $month = substr($comment['opt1number'], 4, 2);
+                $day = substr($comment['opt1number'], 6, 2);
+
+                echo $day . '.' . $month . '.' . $year;
+                ?>
+            </div>
+        </div>
+
+        <div class="comment">
+            <?php echo nl2br($comment["opt1clob"]); ?>
+        </div>
+    </div>
+    <?php $i++; ?>
+<?php endforeach; ?>
+<?php if ($this->preview): ?>
+    <div id="comment_preview" class="commentbox">
+        <a id="anchor" name="preview"><?php if($this->lang == "de") { echo "Vorschau"; } else { echo "Preview"; }; ?>:</a>
+        <div class="email_date_container">
+            <div class="email"><?php echo $this->post["email"]; ?></div>
+            <div class="date"><?php echo date("d") . "." . date("m") . "." . date("Y"); ?></div>
+        </div>
+
+        <div class="comment">
+            <?php echo nl2br($this->post["comment"]); ?>
+        </div>
+        <div id="comment_preview_controls" class="clearfix">
+            <a id="save" href="#"><?php if($this->lang == "de") { echo "speichern"; } else { echo "save"; }; ?></a>
+            <a id="edit" href="#"><?php if($this->lang == "de") { echo "bearbeiten"; } else { echo "edit"; }; ?></a>
+        </div>
+    </div>
+<?php endif; ?>

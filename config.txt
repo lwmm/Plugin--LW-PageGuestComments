@@ -1,0 +1,16 @@
+[mailConfig]
+mailType                    = "debug" # weitere erlaubte zendMail oder phpMail
+mailDebugLogDir             = "mailLogs/"
+mailDebugLogFile            = "log.txt"
+from                        = ""
+replyTo                     = ""
+subjectPrefix               = "test - "
+username                    = ""
+password                    = ""
+server                      = "smtp.1und1.de"
+port                        = 25
+ssl                         = ""
+contact[organisationName]   = "Logic-Works GmbH"
+contact[name]               = "Max Mustermann"
+contact[phone]              = "+49 221 phone"
+contact[fax]                = "+49 221 fax"
