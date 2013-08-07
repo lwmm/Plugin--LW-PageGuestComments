@@ -45,7 +45,7 @@ class PageGuestCommentsController
 
                 if (isset($errors["firstname"][99]) || isset($errors["lastname"][99]) || isset($errors["uniqId"][99])) {
                     unset($_SESSION[$this->request->getAlnum("uniqId")]);
-                    \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getUrl());
+                    \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getBaseUrl($this->request->getIndex()));
                 }
 
                 if (!empty($errors)) {
@@ -71,16 +71,16 @@ class PageGuestCommentsController
                 }
                 
                 unset($_SESSION[$this->request->getAlnum("uniqId")]);
-                \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getUrl());
+                \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getBaseUrl($this->request->getIndex()));
                 break;
 
             case "delete":
                 $commandHandler->deleteComment($this->request->getInt("cid"));
-                \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getUrl());
+                \LwPageGuestComments\Services\Page::reload(\LwPageGuestComments\Services\Page::getBaseUrl($this->request->getIndex()));
                 break;
         }
 
-        $view = new \LwPageGuestComments\Views\Container($this->config);
+        $view = new \LwPageGuestComments\Views\Container($this->config, $this->request->getIndex());
         $this->response->setOutputByKey("LwPageGuestComments", $view->render($array));
     }
 

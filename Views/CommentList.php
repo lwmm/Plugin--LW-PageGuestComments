@@ -10,6 +10,13 @@ namespace LwPageGuestComments\Views;
 class CommentList
 {
 
+    protected $pageIndex;
+
+    public function __construct($pageIndex)
+    {
+        $this->pageIndex = $pageIndex;
+    }
+
     /**
      * The html template will be rendered and return.
      * 
@@ -18,11 +25,11 @@ class CommentList
      * @return string
      */
     public function render($comments, $post, $preview, $admin, $lang)
-    {        
+    {
         $view = new \lw_view(dirname(__FILE__) . '/Templates/CommentList.phtml');
-        $view->saveUrl = \LwPageGuestComments\Services\Page::getUrl()."&cmd=save";
-        $view->deleteUrl = \LwPageGuestComments\Services\Page::getUrl()."&cmd=delete";
-        
+        $view->saveUrl = \LwPageGuestComments\Services\Page::getBaseUrl($this->pageIndex) . "&cmd=save";
+        $view->deleteUrl = \LwPageGuestComments\Services\Page::getBaseUrl($this->pageIndex) . "&cmd=delete";
+
         $view->lang = $lang;
         $view->admin = $admin;
         $view->comments = $comments;
@@ -31,5 +38,5 @@ class CommentList
 
         return $view->render();
     }
-    
+
 }

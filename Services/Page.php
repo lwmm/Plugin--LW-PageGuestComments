@@ -37,5 +37,11 @@ class Page
     {
         return \lw_page::getInstance($index)->getUrl($array);
     }
+    
+    public static function getBaseUrl($index)
+    {
+      $config = \lw_registry::getInstance()->getEntry("config");
+      return $config["url"]["client"]."index.php?index=". $index;
+    }
 
 }

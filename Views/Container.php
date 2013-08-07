@@ -10,10 +10,13 @@ namespace LwPageGuestComments\Views;
 class Container
 {
     protected $config;
-    
-    public function __construct($config)
+    protected $pageIndex;
+
+
+    public function __construct($config, $pageIndex)
     {
         $this->config = $config;
+        $this->pageIndex = $pageIndex;
     }
 
 
@@ -39,8 +42,8 @@ class Container
             $preview = $array["preview"];
         }
         
-        $commentList = new \LwPageGuestComments\Views\CommentList();
-        $commentForm = new \LwPageGuestComments\Views\CommentForm();
+        $commentList = new \LwPageGuestComments\Views\CommentList($this->pageIndex);
+        $commentForm = new \LwPageGuestComments\Views\CommentForm($this->pageIndex);
         
         $view = new \lw_view(dirname(__FILE__) . '/Templates/Container.phtml');
         $view->jQueryMin = $this->config["url"]["media"] ."jquery/jquery.min.js";

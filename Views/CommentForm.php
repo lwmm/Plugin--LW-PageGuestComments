@@ -9,6 +9,14 @@ namespace LwPageGuestComments\Views;
 
 class CommentForm
 {
+
+    protected $pageIndex;
+
+    public function __construct($pageIndex)
+    {
+        $this->pageIndex = $pageIndex;
+    }
+
     /**
      * The html template will be rendered and return.
      * 
@@ -17,11 +25,11 @@ class CommentForm
      * @return string
      */
     public function render($post, $errors, $lang, $uniqId)
-    {        
+    {
         $view = new \lw_view(dirname(__FILE__) . '/Templates/CommentForm.phtml');
-        
-        $view->actionUrl = \LwPageGuestComments\Services\Page::getUrl()."&cmd=addComment#preview";
-        $view->baseUrl = \LwPageGuestComments\Services\Page::getUrl();
+
+        $view->actionUrl = \LwPageGuestComments\Services\Page::getBaseUrl($this->pageIndex) . "&cmd=addComment#preview";
+        $view->baseUrl = \LwPageGuestComments\Services\Page::getBaseUrl($this->pageIndex);
         $view->post = $post;
         $view->errors = $errors;
         $view->lang = $lang;
@@ -29,5 +37,5 @@ class CommentForm
 
         return $view->render();
     }
-    
+
 }
